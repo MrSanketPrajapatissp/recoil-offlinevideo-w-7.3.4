@@ -1,75 +1,62 @@
 import {
-  useRecoilState,
-  useRecoilValue,
   RecoilRoot,
   useSetRecoilState,
+  useRecoilValue,
+  useRecoilState,
 } from "recoil";
-import { countAtom, evenSelector } from "./store/atom/count";
-import { useMemo } from "react";
+import {
+  jobsAtom,
+  messagingAtom,
+  networkAtom,
+  notificationAtom,
+} from "./store/atom/count";
 
-// Propdrilling
-
-function App() {
+export default function App() {
   return (
-    <div>
-      <RecoilRoot>
-        <Count />
-      </RecoilRoot>
-    </div>
+    <RecoilRoot>
+      <MainApp />
+    </RecoilRoot>
   );
 }
 
-function Count() {
-  console.log("count re-render");
+function MainApp() {
+  const networkNotificationCount = useRecoilValue(networkAtom);
+  const finalNetworkCount =
+    networkNotificationCount >= 100 ? "99+" : networkNotificationCount;
+  const jobsCount = useRecoilValue(jobsAtom);
+
+  const [messagingCount, setMessagingCount] = useRecoilState(messagingAtom);
+
   return (
     <div>
-      <CountRenderer />
-      <Buttons />
-    </div>
-  );
-}
-
-function CountRenderer() {
-  const count = useRecoilValue(countAtom);
-  return (
-    <div>
-      <div>{count}</div>
-      <EventCountRender />
-    </div>
-  );
-}
-
-function EventCountRender() {
-  // const count = useRecoilValue(countAtom);
-  const isEven = useRecoilValue(evenSelector);
-
-  return <div>{isEven ? "It is even" : null}</div>;
-}
-
-function Buttons() {
-  const setCount = useSetRecoilState(countAtom);
-  console.log("Button rendering"); /// this statement not rendering again when the count changes or buttons are not rendering again on screen
-  return (
-    <div>
-      <button
-        onClick={() => {
-          setCount((count) => count + 1);
-        }}
-      >
-        Increase
+      <button>Home</button>
+      <button>My Network ({finalNetworkCount})</button>
+      <button>Jobs ({jobsCount >= 100 ? "99+" : jobsCount})</button>
+      <button>
+        Messaging({messagingCount >= 100 ? "99+" : messagingCount})
       </button>
+      <NotificationButtonUpdater />
       <button
         onClick={() => {
-          setCount(function (c) {
-            // the arrow function syntax and this syntax works the same
-            return c - 1;
-          });
+          setMessagingCount(messagingCount + 1);
         }}
       >
-        Decrease
+        Me
       </button>
     </div>
   );
 }
 
-export default App;
+function NotificationButtonUpdater() {
+  const notificationCount = useRecoilValue(notificationAtom);
+  const setNotificationAtomCount = useSetRecoilState(notificationAtom);
+  return (
+    <button
+      onClick={() => {
+        setNotificationAtomCount((c) => c + 1);
+      }}
+    >
+      Notification({notificationCount >= 100 ? "99+" : notificationCount})
+    </button>
+  );
+}

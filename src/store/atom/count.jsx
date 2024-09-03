@@ -1,23 +1,23 @@
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
-export const countAtom = atom({
-  key: "countAtom",
+export const networkAtom = atom({
+  key: "networkAtom",
+  default: 102,
+});
+
+export const jobsAtom = atom({
+  key: "jobsAtom",
+  default: 12,
+});
+
+export const notificationAtom = atom({
+  key: "notificationAtom",
   default: 0,
 });
 
-export const evenSelector = selector({
-  key: "evenSelector",
-  get: (props) => {
-    const count = props.get(countAtom);
-    return count % 2 == 0;
-  },
+export const messagingAtom = atom({
+  key: "messagingAtom",
+  default: 17,
 });
 
-export const filterTodos = selector({
-  key: "filterTodos",
-  get: (props) => {
-    const todos = props.get(todoAtom);
-    const filter = props.get(filtertodo);
-    return todos.filter(x => x.title.includes(filter) || x.description.includes(filter))
-  }
-})
+
