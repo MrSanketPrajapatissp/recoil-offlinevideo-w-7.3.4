@@ -1,15 +1,12 @@
-import {
-  RecoilRoot,
-  useSetRecoilState,
-  useRecoilValue,
-  useRecoilState,
-} from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 import {
   jobsAtom,
   messagingAtom,
   networkAtom,
   notificationAtom,
+  totalNotificationSelector,
 } from "./store/atom/count";
+import { useMemo } from "react";
 
 export default function App() {
   return (
@@ -24,8 +21,16 @@ function MainApp() {
   const finalNetworkCount =
     networkNotificationCount >= 100 ? "99+" : networkNotificationCount;
   const jobsCount = useRecoilValue(jobsAtom);
+  const notificationCount = useRecoilValue(notificationAtom);
+  const messagingCount = useRecoilValue(messagingAtom);
 
-  const [messagingCount, setMessagingCount] = useRecoilState(messagingAtom);
+  // const totalCount = useMemo(() => {  // one way of doing total_count
+  //   return (
+  //     jobsCount + notificationCount + networkNotificationCount + messagingCount
+  //   );
+  // }, [jobsCount, notificationCount, networkNotificationCount, messagingCount]);
+
+  const totalCount = useRecoilValue(totalNotificationSelector);
 
   return (
     <div>
@@ -35,28 +40,10 @@ function MainApp() {
       <button>
         Messaging({messagingCount >= 100 ? "99+" : messagingCount})
       </button>
-      <NotificationButtonUpdater />
-      <button
-        onClick={() => {
-          setMessagingCount(messagingCount + 1);
-        }}
-      >
-        Me
+      <button>
+        Notification({notificationCount >= 100 ? "99+" : notificationCount})
       </button>
+      <button>Me ({totalCount})</button>
     </div>
-  );
-}
-
-function NotificationButtonUpdater() {
-  const notificationCount = useRecoilValue(notificationAtom);
-  const setNotificationAtomCount = useSetRecoilState(notificationAtom);
-  return (
-    <button
-      onClick={() => {
-        setNotificationAtomCount((c) => c + 1);
-      }}
-    >
-      Notification({notificationCount >= 100 ? "99+" : notificationCount})
-    </button>
   );
 }
