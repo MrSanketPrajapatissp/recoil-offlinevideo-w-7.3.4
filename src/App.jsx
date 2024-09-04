@@ -5,7 +5,9 @@ import PropTypes from "prop-types";
 function App() {
   return (
     <RecoilRoot>
-      <Todo id={1} />
+      <Todo id={6} />
+      <Todo id={8} />
+      <Todo id={3} />
       <Todo id={2} />
     </RecoilRoot>
   );
@@ -16,8 +18,8 @@ function Todo({ id }) {
 
   return (
     <div>
-      <h3>{currentTodo.title}</h3>
-      <p>{currentTodo.description}</p>
+      <h3>{currentTodo.todo}</h3>
+      <p>{currentTodo.id}</p>
     </div>
   );
 }

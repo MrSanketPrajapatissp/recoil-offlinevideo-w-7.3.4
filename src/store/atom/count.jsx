@@ -1,38 +1,15 @@
-import { atomFamily } from "recoil";
-
-export const TODOS = [
-  {
-    id: 1,
-    title: "Go to gym",
-    description: "Go by cycle",
-  },
-  {
-    id: 2,
-    title: "Learn Express",
-    description: "Learn by doing Code",
-  },
-];
-
-export const todosAtomFamily = atomFamily({
-  key: "todosAtomFamily",
-  default: (id) => {
-    return (
-      TODOS.find((x) => x.id === id) || {
-        title: "Not found",
-        description: "Not found",
-      }
-    );
-  },
-});
+import { atomFamily, selectorFamily } from "recoil";
+import axios from "axios";
 
 export const TodosAtomFamily = atomFamily({
-  key: "TodoAtomFamily",
-  default: (id) => {
-    return (
-      TODOS.find((x) => x.id === id) || {
-        title: "Not Found",
-        description: "Not Found",
-      }
-    );
-  },
+  key: "todoAtomFamily",
+  default: selectorFamily({
+    key: "todoSelectorFamily",
+    get:
+      (id) =>
+      async () => {
+        const res = await axios.get(`https://dummyjson.com/todos/${id}`);
+        return res.data;
+      },
+  }),
 });
