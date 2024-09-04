@@ -1,34 +1,38 @@
-import { atom, selector } from "recoil";
+import { atomFamily } from "recoil";
 
-export const networkAtom = atom({
-  key: "networkAtom",
-  default: 102,
-});
-
-export const jobsAtom = atom({
-  key: "jobsAtom",
-  default: 12,
-});
-
-export const notificationAtom = atom({
-  key: "notificationAtom",
-  default: 0,
-});
-
-export const messagingAtom = atom({
-  key: "messagingAtom",
-  default: 17,
-});
-
-export const totalNotificationSelector = selector(
+export const TODOS = [
   {
-    key : "totalNotificationSelector",
-    get: ({get}) => {
-      const networkCount = get(networkAtom);
-      const jobsAtomCount = get(jobsAtom);
-      const messagingAtomCount = get(messagingAtom);
-      const notificationAtomCount = get(notificationAtom);
-      return networkCount + jobsAtomCount + messagingAtomCount + notificationAtomCount;
-    }
-  }
-)
+    id: 1,
+    title: "Go to gym",
+    description: "Go by cycle",
+  },
+  {
+    id: 2,
+    title: "Learn Express",
+    description: "Learn by doing Code",
+  },
+];
+
+export const todosAtomFamily = atomFamily({
+  key: "todosAtomFamily",
+  default: (id) => {
+    return (
+      TODOS.find((x) => x.id === id) || {
+        title: "Not found",
+        description: "Not found",
+      }
+    );
+  },
+});
+
+export const TodosAtomFamily = atomFamily({
+  key: "TodoAtomFamily",
+  default: (id) => {
+    return (
+      TODOS.find((x) => x.id === id) || {
+        title: "Not Found",
+        description: "Not Found",
+      }
+    );
+  },
+});

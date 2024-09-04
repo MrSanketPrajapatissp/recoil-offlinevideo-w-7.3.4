@@ -1,49 +1,29 @@
-import { RecoilRoot, useRecoilValue } from "recoil";
-import {
-  jobsAtom,
-  messagingAtom,
-  networkAtom,
-  notificationAtom,
-  totalNotificationSelector,
-} from "./store/atom/count";
-import { useMemo } from "react";
+import { useRecoilValue, RecoilRoot } from "recoil";
+import { TodosAtomFamily } from "./store/atom/count";
+import PropTypes from "prop-types";
 
-export default function App() {
+function App() {
   return (
     <RecoilRoot>
-      <MainApp />
+      <Todo id={1} />
+      <Todo id={2} />
     </RecoilRoot>
   );
 }
 
-function MainApp() {
-  const networkNotificationCount = useRecoilValue(networkAtom);
-  const finalNetworkCount =
-    networkNotificationCount >= 100 ? "99+" : networkNotificationCount;
-  const jobsCount = useRecoilValue(jobsAtom);
-  const notificationCount = useRecoilValue(notificationAtom);
-  const messagingCount = useRecoilValue(messagingAtom);
-
-  // const totalCount = useMemo(() => {  // one way of doing total_count
-  //   return (
-  //     jobsCount + notificationCount + networkNotificationCount + messagingCount
-  //   );
-  // }, [jobsCount, notificationCount, networkNotificationCount, messagingCount]);
-
-  const totalCount = useRecoilValue(totalNotificationSelector);
+function Todo({ id }) {
+  const currentTodo = useRecoilValue(TodosAtomFamily(id));
 
   return (
     <div>
-      <button>Home</button>
-      <button>My Network ({finalNetworkCount})</button>
-      <button>Jobs ({jobsCount >= 100 ? "99+" : jobsCount})</button>
-      <button>
-        Messaging({messagingCount >= 100 ? "99+" : messagingCount})
-      </button>
-      <button>
-        Notification({notificationCount >= 100 ? "99+" : notificationCount})
-      </button>
-      <button>Me ({totalCount})</button>
+      <h3>{currentTodo.title}</h3>
+      <p>{currentTodo.description}</p>
     </div>
   );
 }
+
+Todo.propTypes = {
+  id: PropTypes.number.isRequired,
+};
+
+export default App;
